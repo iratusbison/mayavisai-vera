@@ -1,0 +1,136 @@
+{% extends "dashboard.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance List - {{ member.name }}</title>
+    <style>
+    .sidebar-collapse {
+    position: fixed; /* Fixed positioning */
+    top: 5px; /* Adjust the top position as needed */
+    left: 10px; /* Adjust the left position as needed */
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Header Styles */
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        /* View Payment Details Link Styles */
+        .view-details-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .view-details-link:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h4>Attendance Details for {{ member.name }}</h4>
+
+        <!-- Date Range Filter Form -->
+        <form method="get" class="mb-4">
+            <div class="row">
+                <div class="col-md-5">
+                    <label for="start_date" class="form-label">Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" value="{{ start_date }}">
+                </div>
+                <div class="col-md-5">
+                    <label for="end_date" class="form-label">End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" value="{{ end_date }}">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary mt-3">Filter</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Attendance Summary -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h4>Total Present: {{ total_present }}</h4>
+            </div>
+
+        </div>
+
+        <!-- Attendance Details Table -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time-In</th>
+                    <th>Time-Out</th>
+                    <th>Status</th>
+                    <th>Payment Expiry Date</th>
+                    <th>Payment Expiry Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attendance, expiry_date, expiry_status in attendances %}
+                <tr>
+                    <td>{{ attendance.date }}</td>
+                    <td>{{ attendance.time_in }}</td>
+                    <td>{{ attendance.time_out }}</td>
+                    <td>
+                        {% if attendance.present %}
+                            <span class="badge bg-success">Present</span>
+                        {% else %}
+                            <span class="badge bg-danger">Absent</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if expiry_date %}
+                            {{ expiry_date }}
+                        {% else %}
+                            No payment details
+                        {% endif %}
+                    </td>
+                    <td>{{ expiry_status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+{% endblock dashboard_content %}

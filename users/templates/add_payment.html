@@ -1,0 +1,124 @@
+{% extends "dashboard.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Payment</title>
+    <link rel="stylesheet" href="{% static 'path/to/selectize.css' %}">
+    <style>
+        .sidebar-collapse {
+            position: fixed; /* Fixed positioning */
+            top: 5px; /* Adjust the top position as needed */
+            left: 10px; /* Adjust the left position as needed */
+            z-index: 9999; /* Ensure it appears above other elements */
+        }
+
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a; /* Dark background color */
+            color: #ffffff; /* Light text color */
+        }
+
+        /* Header Styles */
+        h3 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Form Styles */
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #333; /* Darker card background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 10px; /* Add some margin for separation */
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Center button */
+        center {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        center button a {
+            color: #ffffff; /* Light text color */
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        center button a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h3>Add Payment</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <input type="submit" name="complete_payment" value="Add Payment">
+        <input type="submit" name="hold_payment" value="Hold Payment">
+    </form>
+    <center><button><a href="{% url 'member_list' %}" class="button">Home</a></button></center>
+
+    <!-- Include Selectize.js library -->
+    <script src="{% static 'path/to/selectize.js' %}"></script>
+
+    <!-- Initialize Selectize for member field -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+      var paymentTypeField = document.querySelector('#id_payment_type');
+      var customExpiryDateField = document.querySelector('#custom_expiry_date_field');
+      
+      function toggleCustomExpiryDateField() {
+        if (paymentTypeField.value === 'custom') {
+          customExpiryDateField.style.display = 'block';
+        } else {
+          customExpiryDateField.style.display = 'none';
+        }
+      }
+      
+      // Initial toggle
+      toggleCustomExpiryDateField();
+      
+      // Toggle on change
+      paymentTypeField.addEventListener('change', function () {
+        toggleCustomExpiryDateField();
+      });
+    });
+        $(document).ready(function() {
+            $('.selectize').selectize({
+                // Options for Selectize initialization
+            });
+        });
+    </script>
+</body>
+{% endblock dashboard_content %}

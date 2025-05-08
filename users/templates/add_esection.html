@@ -1,0 +1,45 @@
+{% extends "dashboard.html" %}
+
+{% block dashboard_content %}
+
+    <h5>Add ESection</h5>
+    <form method="post" style="background-color: #333; padding: 20px; border-radius: 5px;">
+    {% csrf_token %}
+    <div style="color: #ffffff;">
+        {{ form.as_p }}
+    </div>
+    <button type="submit" style="background-color: #3498db; color: #ffffff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+        Add ESection
+    </button>
+</form>
+
+<style>
+    /* Dark mode input styles */
+    input, select, textarea {
+        background-color: #444;
+        color: #ffffff;
+        border: 1px solid #555;
+        padding: 10px;
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    /* Placeholder text in dark mode */
+    input::placeholder, textarea::placeholder {
+        color: #aaaaaa;
+    }
+
+    /* Adjust label colors */
+    label {
+        color: #ffffff;
+    }
+
+    /* Button hover effect */
+    button:hover {
+        background-color: #2980b9;
+    }
+</style>
+
+    <a href="{% url 'esection_list' %}">Back to ESection List</a>
+
+{% endblock %}

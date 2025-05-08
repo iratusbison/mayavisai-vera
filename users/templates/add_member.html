@@ -1,0 +1,81 @@
+{% extends "dashboard.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Edit Member{% else %}Add Member{% endif %}</title>
+    <style>
+        /* Dark Mode Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a; /* Dark background */
+            color: #ffffff; /* Light text on a dark background */
+        }
+
+        /* Header Styles */
+        h3 {
+            text-align: center;
+            margin-top: 20px;
+            color: #ffffff; /* Light text */
+        }
+
+        /* Form Styles */
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #333; /* Dark form background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form input[type="text"],
+        form input[type="email"],
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #666; /* Darker border */
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #444; /* Dark input background */
+            color: #ffffff; /* Light text */
+        }
+
+        form input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff; /* Button color */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3; /* Button hover color */
+        }
+        .sidebar-collapse {
+    position: fixed; /* Fixed positioning */
+    top: 5px; /* Adjust the top position as needed */
+    left: 10px; /* Adjust the left position as needed */
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
+    </style>
+</head>
+<body>
+    <h3>{% if form.instance.pk %}Edit Member{% else %}Add Member{% endif %}</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save">
+    </form>
+</body>
+{% endblock dashboard_content %}

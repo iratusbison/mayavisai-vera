@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    {{ "Welcome "}}
+{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/index.min.css' %}">
+<style>
+    .icon-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .icon-container i {
+        font-size: 3rem;
+        color: #757575;
+    }
+    .icon-container i:hover {
+        color: #616161;
+    }
+    .header-title {
+        margin-bottom: 40px;
+    }
+    .btn-large, .btn {
+        display: inline-block;
+        margin-top: 20px;
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="container valign-wrapper">
+    <div class="row center-align">
+        <h4 class="header-title">BISON'S MANAGER</h4>
+        <div class="icon-container">
+            <i class="fas fa-dumbbell"></i>
+            <i class="fas fa-running"></i>
+            <i class="fas fa-heartbeat"></i>
+            <i class="fas fa-biking"></i>
+        </div>
+        <a class="btn-large hide-on-med-and-down grey darken-3 waves-effect waves-effect-light" href="{% url 'login' %}">Login</a>
+        <a class="btn show-on-med-and-down hide-on-large-only grey darken-3 waves-effect waves-effect-light" href="{% url 'login' %}">Login</a>
+    </div>
+</div>
+{% endblock content %}

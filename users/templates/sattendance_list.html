@@ -1,0 +1,208 @@
+{% extends "staffdashboard.html" %}
+{% load static %}
+
+{% block staffdashboard_content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance List</title>
+    <style>
+        .sidebar-collapse {
+            position: fixed;
+            top: 5px;
+            left: 10px;
+            z-index: 9999;
+        }
+
+        h5 {
+            text-align: center;
+            margin-top: 10px;
+            color: #faf9f9; /* Golden text color */
+        }
+
+        /* Form and Table Styles */
+        form,
+        table {
+            background-color: #333; /* Dark background color */
+            color: #fff; /* Light text color */
+            padding: 20px; /* Add padding */
+            border-radius: 10px; /* Add rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow */
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        form input[type="date"],
+        form button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #444; /* Darker input background */
+            color: #fff; /* Light text color */
+        }
+
+        form button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #263238; /* Darker table header background */
+            font-weight: bold;
+        }
+
+        /* Conditional Text Color
+        .green {
+            color: green;
+        }
+
+        .orange {
+            color: orange;
+        }
+
+        .red {
+            color: red;
+        }*/
+
+        /* Responsive Design */
+        @media only screen and (max-width: 767px) {
+            form,
+            table {
+                width: 95%;
+            }
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #333; /* Darker form background */
+            padding: 5px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h5>Attendance List</h5>
+     <form method="GET" id="filter-form">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date">
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date">
+        <button type="submit">Filter</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Reg NO</th>
+                <th></th>
+                <th>Member Name</th>
+                <th>Date</th>
+                <th>Time-In</th>
+                <th>Time-Out</th>
+                <th>Valid Till</th>
+                <th>Validation</th>
+            </tr>
+        </thead>
+        {% if start_date and end_date %}
+            <p>Total Attendance ({{ start_date }} to {{ end_date }}): {{ total_attendance }}</p>
+        {% else %}
+            <p>Total Attendance: {{ total_attendance }}</p>
+        {% endif %}
+
+        <tbody>
+            {% for attendance, expiry_date, expiry_status in attendance_with_expiry %}
+            <tr>
+                <td>{{ attendance.member.reg_no }}</td>
+                  <td>   <a href="{% url 'smember_detail' attendance.member.pk %}">
+        {% if attendance.member.image %}
+            <img src="{{ attendance.member.image.url }}" alt="{{ attendance.member.name }}" class="about-image" style="width:50px;height:50px;border-radius:50%;object-fit:cover;">
+        {% endif %}
+
+    </a></td>
+                <td>
+                    <a href="{% url 'smember_detail' attendance.member.pk %}">
+                        <span class="member-name">{{ attendance.member.name }}</span>
+                    </a>
+                </td>
+                <td>{{ attendance.date }}</td>
+                <td>{{ attendance.time_in }}</td>
+                <td>{{ attendance.time_out }}</td>
+                <td class="{% if expiry_date %}{% if expiry_date >= attendance.date %}green{% else %}red{% endif %}{% endif %}">
+            {{ expiry_date|default:"Not Available" }}
+        </td>
+                <td>
+                    <span class="{% if expiry_status == 'Expired' %}red{% elif 'Expiring' in expiry_status %}orange{% elif 'No payment details' in expiry_status %}red{% else %}green{% endif %}">
+                        {{ expiry_status }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+   <script>
+        // Function to format the date as YYYY-MM-DD
+        function getFormattedDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Set the "datesModified" flag to avoid future auto-submissions
+        function markDatesAsModified() {
+            localStorage.setItem('datesModified', 'true');
+        }
+
+        // On page load, set default values for start and end dates
+        window.onload = function() {
+            const today = new Date();
+            const formattedToday = getFormattedDate(today);
+
+            const startDateField = document.getElementById('start_date');
+            const endDateField = document.getElementById('end_date');
+
+            // Check if 'start_date' or 'end_date' are empty (not set by the user)
+            if (!startDateField.value) {
+                startDateField.value = formattedToday;
+            }
+            if (!endDateField.value) {
+                endDateField.value = formattedToday;
+            }
+
+            // If the form has not been filtered yet (no date manually set), submit it automatically
+            const urlParams = new URLSearchParams(window.location.search);
+            if (!urlParams.has('start_date') && !urlParams.has('end_date')) {
+                document.getElementById('filter-form').submit();  // Auto-submit form with today's date
+            }
+        };
+
+        // Mark the dates as manually modified when changed
+        document.getElementById('start_date').addEventListener('change', markDatesAsModified);
+        document.getElementById('end_date').addEventListener('change', markDatesAsModified);
+    </script>
+</body>
+
+{% endblock staffdashboard_content %}

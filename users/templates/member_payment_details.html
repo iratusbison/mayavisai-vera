@@ -1,0 +1,104 @@
+{% extends "dashboard.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment List - {{ member.name }}</title>
+    <style>
+    .sidebar-collapse {
+    position: fixed; /* Fixed positioning */
+    top: 5px; /* Adjust the top position as needed */
+    left: 10px; /* Adjust the left position as needed */
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Header Styles */
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        /* View Payment Details Link Styles */
+        .view-details-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .view-details-link:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h3>Payment List - {{ member.name }} - {{ member.phone }}</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Payment Type</th>
+                <th>Recipt ID</th>
+                <th>Payment ID</th>
+                <th>Amount</th>
+                <th>Payment Date</th>
+                <th>Expiry Date</th>
+                <th>Bill</th>
+                <th>Edit</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            <tr>
+                <td>{{ payment.payment_type }}</td>
+                <td>{{ payment.receipt_id }}</td>
+                <td>{{ payment.pay_id }}</td>
+                <td>{{ payment.amount }}</td>
+                <td>{{ payment.payment_date }}</td>
+                <td>{{ payment.expiry_date }}</td>
+                <td><a href="{% url 'generate_pdf_receipt' payment_id=payment.id  member_id=member.id %}" target="_blank" class="btn btn-warning">Bill</a></td>
+                <td><a href="{% url 'edit_payment' payment.id %}" class="btn btn-warning">Edit</a></td>
+
+
+
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+</body>
+{% endblock dashboard_content %}

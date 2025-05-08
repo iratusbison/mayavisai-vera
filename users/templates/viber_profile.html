@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viber Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Button to toggle dark/light mode */
+        #theme-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+
+        /* Larger and more accessible button */
+        .toggle-btn {
+            font-size: 1.5rem;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+        }
+
+        /* Dark mode button styling */
+        body.dark-mode .toggle-btn {
+            background-color: #333;
+            color: #ffffff;
+        }
+
+        /* Light mode button styling */
+        body.light-mode .toggle-btn {
+            background-color: #f0f0f0;
+            color: #000000;
+        }
+
+        /* Button hover effect */
+        .toggle-btn:hover {
+            background-color: #dddddd;
+            transform: scale(1.05);
+        }
+
+        /* Focus state for accessibility */
+        .toggle-btn:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 4px;
+        }
+
+        /* Light and Dark Mode Styles */
+        body {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light-mode {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        body.dark-mode {
+            background-color: #1b1b1b;
+            color: #e0e0e0;
+        }
+
+        /* Neon Look */
+        .text-neon {
+            color: #ff6f61; /* Soft neon coral color */
+            text-shadow: 0 0 8px rgba(255, 111, 97, 0.8);
+            transition: text-shadow 0.3s ease-in-out;
+        }
+
+        .text-neon:hover {
+            text-shadow: 0 0 12px rgba(255, 111, 97, 1);
+        }
+
+        .img-thumbnail {
+            border: 2px solid #ff6f61; /* Soft neon coral border */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .img-thumbnail:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 111, 97, 0.8);
+        }
+
+        /* Style for profile information */
+        #viber-info button {
+            margin-bottom: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 1rem;
+            border: none;
+            background-color: #ff6f61;
+            color: #ffffff;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #viber-info button:hover {
+            background-color: #ff4c3b;
+            transform: scale(1.05);
+        }
+
+        #viber-details {
+            margin-top: 10px;
+        }
+
+        /* Animation for showing/hiding details */
+        #viber-details {
+            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+        }
+
+        #viber-details.show {
+            max-height: 800px;
+            opacity: 1;
+        }
+
+        /* Adding more styling and icons for TDEE section */
+        .tdee-level {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #343a40;
+            padding: 10px;
+            border-radius: 5px;
+            color: #ffffff;
+            margin-bottom: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .tdee-level:hover {
+            background-color: #495057;
+        }
+
+        .tdee-level strong {
+            display: flex;
+            align-items: center;
+        }
+
+        .tdee-level strong i {
+            margin-right: 8px;
+            color: #ff6f61;
+        }
+
+        .collapse {
+            padding-left: 20px;
+            color: #adb5bd;
+        }
+
+        /* Buttons style */
+        .btn-secondary {
+            background-color: #ff6f61;
+            border-color: #ff6f61;
+            color: white;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #ff4c3b;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <button id="theme-toggle" class="btn btn-light toggle-btn"><strong>🌙 Mode</strong></button>
+
+    <div class="container mt-5">
+        <h2 class="text-neon"><i class="fas fa-user-circle"></i> {{ viber.user.username }}'s Profile</h2>
+        <div class="row">
+            <div class="col-md-4">
+                {% if viber.image %}
+                    <img src="{{ viber.image.url }}" alt="Profile Picture" class="img-thumbnail">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" alt="No Profile Picture" class="img-thumbnail">
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <p><strong><i class="fas fa-info-circle"></i> Bio:</strong> {{ viber.bio }}</p>
+                <p><strong><i class="fas fa-map-marker-alt"></i> Location:</strong> {{ viber.location }}</p>
+                <p><strong><i class="fas fa-calendar-alt"></i> Birth Date:</strong> {{ viber.birth_date }}</p>
+                <p><strong><i class="fas fa-venus-mars"></i> Gender:</strong> {{ viber.get_gender_display }}</p>
+                <p><strong><i class="fas fa-envelope"></i> Email:</strong> {{ viber.email }}</p>
+                <p><strong><i class="fas fa-phone"></i> Phone:</strong> {{ viber.phone }}</p>
+                <p><strong><i class="fas fa-weight"></i> Weight:</strong> {{ viber.weight }}</p>
+                <p><strong><i class="fas fa-ruler-vertical"></i> Height:</strong> {{ viber.height }}</p>
+
+                <div id="viber-info">
+                    <button onclick="toggleViberInfo()"><i class="fas fa-info-circle"></i> Show Details</button>
+                    <div id="viber-details">
+                        <p><strong>Exercise History:</strong> {{ viber.exercise_history }}</p>
+                        <p><strong>Medications:</strong> {{ viber.medications }}</p>
+                        <p><strong>Surgeries:</strong> {{ viber.surgeries }}</p>
+                        <p><strong>Heart Disease:</strong> {{ viber.heart_disease }}</p>
+                        <p><strong>Medical History:</strong> {{ viber.medical_history }}</p>
+                        <p><strong>Allergies:</strong> {{ viber.allergies }}</p>
+                        <p><strong>Blood Pressure:</strong> {{ viber.get_blood_pressure_display }}</p>
+                        <p><strong>Diabetes:</strong> {{ viber.get_diabetes_display }}</p>
+                        <p><strong>Arthritis:</strong> {{ viber.get_arthritis_display }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-3">
+                <h4><i class="fas fa-fire-alt"></i> BMR : {{ bmr }}</h4>
+                <h3><i class="fas fa-dumbbell"></i> Total Daily Energy Expenditure (TDEE)</h3>
+                <ul>
+                    {% for level, values in tdees.items %}
+                        <li class="tdee-level">
+                            <strong><i class="fas fa-chart-line"></i> {{ level }}:</strong> 
+                            <div>
+                                <span>{{ values.calories }} calories/day</span>
+                                <span><i class="fas fa-bread-slice"></i> Carbs: {{ values.carbs_grams }}g</span>
+                                <span><i class="fas fa-drumstick-bite"></i> Protein: {{ values.protein_grams }}g</span>
+                                <span><i class="fas fa-bacon"></i> Fat: {{ values.fat_grams }}g</span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <p><strong><i class="fas fa-tint"></i> Water Needs:</strong> {{ water_needs_ml }} ml/day</p>
+            </div>
+        </div>
+        <a href="{% url 'viber_login' %}" class="btn btn-secondary mt-3"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="{% url 'viber_edit_profile' %}" class="btn btn-secondary mt-3"><i class="fas fa-edit"></i> Edit Profile</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var body = document.body;
+            var toggleButton = document.getElementById('theme-toggle');
+
+            // Set dark mode as default
+            body.classList.add('dark-mode');
+            toggleButton.innerHTML = '<strong>🌞</strong>'; // Button text for toggling to light mode
+
+            // Add event listener for toggling theme
+            toggleButton.addEventListener('click', function () {
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('dark-mode');
+                    body.classList.add('light-mode');
+                    this.innerHTML = '<strong>🌙</strong>'; // Change button text to indicate dark mode
+                } else {
+                    body.classList.remove('light-mode');
+                    body.classList.add('dark-mode');
+                    this.innerHTML = '<strong>🌞</strong>'; // Change button text to indicate light mode
+                }
+            });
+        });
+
+        function toggleViberInfo() {
+            var details = document.getElementById("viber-details");
+            var button = document.querySelector("#viber-info button");
+
+            if (details.classList.contains('show')) {
+                details.classList.remove('show');
+                button.innerHTML = '<i class="fas fa-info-circle"></i> Show Details';
+            } else {
+                details.classList.add('show');
+                button.innerHTML = '<i class="fas fa-info-circle"></i> Hide Details';
+            }
+        }
+    </script>
+</body>
+</html>

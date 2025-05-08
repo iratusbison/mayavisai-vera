@@ -1,0 +1,88 @@
+{% extends "dashboard.html" %}
+
+{% block dashboard_content %}
+<div style="text-align: center;">
+    <div style="background-color: #3498db; padding: 10px; border-radius: 5px; text-align: center;">
+        <h5 style="color: #ffffff;">
+            <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px;">insert_chart</i>
+            Sections - Total Expenses: ₹ {{ total_expenses }}
+        </h5>
+    </div>
+    <hr style="border: 1px solid #3498db; margin: 20px 0;">
+    <div class="section-container">
+        {% for esection in esections %}
+        <div class="section-item">
+            <div class="section-details">
+                <span>{{ forloop.counter }}.</span>
+                <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #3498db;">folder</i>
+                <a href="{% url 'expense_list' esection.id %}" style="color: #ffffff;">{{ esection.name }}</a>
+            </div>
+            <div class="section-actions">
+                <form method="post" style="display: inline;" onsubmit="return confirmDelete();">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete_esection" value="{{ esection.id }}">
+                    <button type="submit" style="color: #ffffff;">
+                        <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 5px;">delete</i>
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div><br>
+<div>
+    <a href="{% url 'add_esection' %}" style="color: #ffffff;">
+        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #3498db;">add</i>
+        Add Section
+    </a>
+</div>
+
+<style>
+    /* Style hyperlink text color and remove underlines */
+    a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    /* Style the section items for dark mode */
+    .section-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #3498db;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+
+    .section-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        width: 80%;
+    }
+
+    .section-details {
+        display: flex;
+        align-items: center;
+    }
+
+    .section-details span {
+        margin-right: 10px;
+    }
+
+    /* Style the "Delete" buttons */
+    .section-actions button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this section? The Section May Contain Expense List");
+    }
+</script>
+{% endblock %}

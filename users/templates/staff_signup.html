@@ -1,0 +1,171 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Sign Up - MayaVisai</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-form-container {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .login-form-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .login-form-header h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            color: #ffffff;
+        }
+        .form-group label {
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            color: #e0e0e0;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            color: #ffffff;
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+        }
+        .form-group input::placeholder,
+        .form-group select::placeholder,
+        .form-group textarea::placeholder {
+            color: #ffffff;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            background-color: #333;
+            border-color: #555;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .form-group i {
+            margin-right: 10px;
+        }
+        .text-muted {
+            color: #aaaaaa !important;
+        }
+        .alert {
+            font-size: 14px;
+        }
+        .toggle-password {
+            cursor: pointer;
+            font-size: 14px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container login-container">
+
+    <div class="card-panel row hoverable login-form-container col-md-6">
+        <div class="login-form-header">
+          <center><h1><img src="{% static 'images/im.png' %}" alt="MayaVisai Logo" style="height: 50px; width: auto;"> MayaVisai - Staff Signup</h1></center><br>
+        </div>
+
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        <form method="post" onsubmit="return validatePassword()">
+            {% csrf_token %}
+            <div class="form-group">
+                <i class="fas fa-user"></i>Username
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-lock"></i> Password
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <small class="toggle-password" onclick="togglePasswordVisibility()">Show Password</small>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-lock"></i> Confirm Password
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone"><i class="fas fa-phone"></i> Phone:</label>
+                <input type="number" class="form-control" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Staff Account</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Function to toggle password visibility
+    function togglePasswordVisibility() {
+        var passwordField = document.getElementById("password");
+        var confirmPasswordField = document.getElementById("confirm_password");
+        var togglePasswordText = document.querySelector(".toggle-password");
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            confirmPasswordField.type = "text";
+            togglePasswordText.textContent = "Hide Password";
+        } else {
+            passwordField.type = "password";
+            confirmPasswordField.type = "password";
+            togglePasswordText.textContent = "Show Password";
+        }
+    }
+
+    // Function to validate the password and confirm password fields
+    function validatePassword() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm_password").value;
+        
+        if (password !== confirmPassword) {
+            alert("Passwords do not match!");
+            return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

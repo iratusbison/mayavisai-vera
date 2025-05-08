@@ -1,0 +1,125 @@
+{% extends "dashboard.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<head>
+
+    <title>Personal Archived List</title>
+    <style>
+        .sidebar-collapse {
+    position: fixed; /* Fixed positioning */
+    top: 5px; /* Adjust the top position as needed */
+    left: 10px; /* Adjust the left position as needed */
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        .filter-options, .search {
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+        .filter-options select, .search input {
+            background-color: #333333;
+            color: #ffffff;
+            border: 1px solid #555555;
+            padding: 5px;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+        }
+        .member-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 10px;
+        }
+        .member {
+            background-color: #1e1e1e;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .member:hover {
+            background-color: #333333;
+        }
+        .member a {
+            text-decoration: none;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+        }
+        .member-number {
+            font-weight: bold;
+        }
+        .member-name {
+            margin-left: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .filter-options, .search, .member-list {
+                padding: 0 5%;
+            }
+            .member {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h3>Personal Archive List</h3>
+    <a href="{% url 'archived_generate_member_report_pdf' %}" class="btn btn-primary">Report</a>
+    <!-- Filter options -->
+    <div class="filter-options">
+        <label for="memberFilter">Filter:</label>
+        <select id="memberFilter" onchange="filterMembers()">
+            <option value="all">All Members</option>
+            <!-- Add more filter options if needed -->
+        </select>
+    </div>
+    <!-- Search input -->
+    <div class="search">
+        <input type="text" id="searchInput" oninput="searchMembers()" placeholder="Search">
+    </div>
+    <ul id="memberList" class="member-list">
+        <!-- List all archived members here -->
+        {% for member in personal_archived_members %}
+            <li class="member">
+                <a href="{% url 'member_detail' member.pk %}">
+                    <span class="member-number">{{ member.unique_number }}</span>
+                    <span class="member-name">{{ member.name }}</span>
+                    <span class="member-number">{{ member.phone }}</span>
+                    <!-- Add more member details if needed -->
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Script for filtering and searching -->
+    <script>
+        function filterMembers() {
+            // Implementation of filter function
+            // This function will filter the list based on the selected filter option
+        }
+
+        function searchMembers() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const memberList = document.getElementById("memberList");
+            const listItems = memberList.getElementsByTagName("li");
+
+            for (let i = 0; i < listItems.length; i++) {
+                const listItem = listItems[i];
+                const memberName = listItem.textContent.toLowerCase();
+
+                if (memberName.includes(searchInput)) {
+                    listItem.style.display = "block";
+                } else {
+                    listItem.style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+{% endblock dashboard_content %}

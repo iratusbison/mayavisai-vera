@@ -1,0 +1,421 @@
+{% extends "staffdashboard.html" %}
+{% load static %}
+
+{% block staffdashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member List</title>
+
+      <style>
+    /* Pagination Button Container */
+    #pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        gap: 10px;
+        flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    }
+
+    /* Pagination Buttons */
+    .page-btn {
+        padding: 10px 15px;
+        background-color: #333; /* Dark background */
+        color: #fff; /* White text */
+        border: 1px solid #555; /* Subtle border */
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem; /* Ensure the text size fits well */
+    }
+
+    .page-btn:hover {
+        background-color: #555; /* Highlight on hover */
+    }
+
+    .page-btn[style*="font-weight: bold"] {
+        background-color: #007bff; /* Active button color */
+        color: #fff;
+        border: none;
+    }
+
+    /* Responsive Styles for Pagination */
+    @media (max-width: 768px) {
+        .page-btn {
+            padding: 8px 12px;
+            font-size: 0.9rem; /* Slightly smaller text on mobile */
+        }
+
+        #pagination {
+            gap: 5px; /* Reduce gap between buttons */
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-btn {
+            padding: 6px 10px;
+            font-size: 0.8rem; /* Further reduce text size for very small screens */
+        }
+
+        #pagination {
+            gap: 3px; /* Smaller gap between buttons on very small screens */
+        }
+    }
+</style>
+
+   <style>
+        /* Container for Content */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styling */
+        h3 {
+            text-align: center;
+            color: #fff;
+        }
+
+        /* Filter and Search Styles */
+        .filter-options, .search {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-options label {
+            font-weight: bold;
+        }
+
+        .checkbox-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .sort-button {
+            margin-bottom: 20px;
+            display: block;
+            margin: 0 auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .sort-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Member Card Styles */
+        .member-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    justify-content: space-between;
+}
+
+.member {
+    flex: 1 1 100%; /* By default, each card takes up full width */
+    background-color: #333;
+    color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px; /* Space between rows */
+    position: relative;
+}
+
+.member:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.member-content {
+    padding: 20px;
+    color: #fff;
+}
+
+.about-image {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Media query for larger screens */
+@media only screen and (min-width: 768px) {
+    .member {
+        flex: 1 1 calc(48% - 20px); /* Two cards per row on desktop */
+    }
+}
+
+
+        .member-number {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #fff;
+        }
+
+        .member-name {
+            font-size: 1.1em;
+            margin: 5px 0;
+            color: #fff;
+        }
+
+        .expiry-date {
+            font-size: 0.9em;
+            color: #ff6f00;
+        }
+
+        .whatsapp-button {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            background-color: #25D366;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .whatsapp-button img {
+            margin-right: 8px;
+        }
+
+        .about-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Responsive Styling */
+        @media only screen and (max-width: 768px) {
+            .member {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Member List</h3>
+        <h8>{{ user_profile }}</h8>
+
+        <!-- Filter options -->
+        <div class="filter-options">
+            <label>Filter Members:</label>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" id="filterAll" class="filled-in" onclick="filterMembers()" />
+                    <span>All</span>
+                </label>
+                <label>
+                    <input type="checkbox" id="filterActive" class="filled-in" onclick="filterMembers()" />
+                    <span>Active</span>
+                </label>
+                <label>
+                    <input type="checkbox" id="filterInactive" class="filled-in" onclick="filterMembers()" />
+                    <span>Inactive</span>
+                </label>
+            </div>
+            <p>Total Members: {{ total_members }}</p>
+            <p>Total Active Members: {{ total_active_members }}</p>
+            <p>Total Inactive Members: {{ total_inactive_members }}</p>
+        </div>
+
+        <!-- Sorting button -->
+        <div class="sort-button" onclick="sortMembersByExpiry()">Sort by Expiry Date</div>
+<div id="pagination" style="text-align: center; margin-top: 20px;"></div>
+        <!-- Search input -->
+        <div class="search">
+            <input type="text" id="searchInput" oninput="searchMembers()" placeholder="Search">
+        </div>
+
+        <ul id="memberList" class="member-list">
+            <!-- List all members here -->
+            {% for member, recent_payment in active_members %}
+              <a href="{% url 'smember_detail' member.pk %}">
+                <li class="member active"  data-expiry="{{ recent_payment.expiry_date }}">
+                    <div class="member-content">
+                        {% if member.image %}
+                            <img src="{{ member.image.url }}" alt="{{ member.name }}" class="about-image">
+                        {% endif %}
+                         <div class="member-number">ID:{{ member.unique_number }}  -  Reg No: {{ member.reg_no }}</div>
+                        <div class="member-name">{{ member.name }}</div>
+                         <div class="member-number">
+                            <span class="partial-phone">{{ member.phone|slice:":4" }}****</span>
+                            <span class="full-phone" style="display: none;">{{ member.phone }}</span>
+                        </div>
+                        <div class="expiry-date" style="color: {% if recent_payment.expiry_date < today %}red{% else %}green{% endif %};">
+                            {{ recent_payment.expiry_date }}
+                        </div>
+                         </a>
+                     <!--   <a href="https://wa.me/91{{ member.phone }}?text=Hi%20{{ member.name }}!%20%F0%9F%8E%89%0A%0AThis%20is%20{{ user_profile }}%20.%20Just%20a%20friendly%20reminder%20that%20your%20payment%20is%20due%20on%20{{ recent_payment.expiry_date }}.%20%F0%9F%91%8D%0A%0AKeep%20rocking%20and%20thanks%20for%20being%20awesome!%20If%20you%20need%20any%20help%20or%20have%20questions,%20feel%20free%20to%20reach%20out.%20%F0%9F%98%8A"
+ target="_blank" class="whatsapp-button">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="20" height="20">
+                            Send Message
+                        </a> -->
+                    </div>
+                </li>
+            {% endfor %}
+            {% for member, recent_payment in inactive_members %}
+              <a href="{% url 'smember_detail' member.pk %}">
+                <li class="member inactive"  data-expiry="{{ recent_payment.expiry_date }}">
+                    <div class="member-content">
+                        {% if member.image %}
+                            <img src="{{ member.image.url }}" alt="{{ member.name }}" class="about-image">
+                        {% endif %}
+                        <div class="member-number">ID:{{ member.unique_number }}  -  Reg No: {{ member.reg_no }}</div>
+                        <div class="member-name">{{ member.name }}</div>
+                        <div class="member-number">
+                            <span class="partial-phone">{{ member.phone|slice:":4" }}****</span>
+                            <span class="full-phone" style="display: none;">{{ member.phone }}</span>
+                        </div>
+                        <div class="expiry-date" style="color: red;">
+                            {{ recent_payment.expiry_date }}
+                        </div>
+                         </a>
+                      <!--  <a href="https://wa.me/91{{ member.phone }}?text=Hi%20{{ member.name }}!%20%F0%9F%8E%89%0A%0AThis%20is%20{{ user_profile }}%20.%20Just%20a%20friendly%20reminder%20that%20your%20payment%20is%20due%20on%20{{ recent_payment.expiry_date }}.%20%F0%9F%91%8D%0A%0AKeep%20rocking%20and%20thanks%20for%20being%20awesome!%20If%20you%20need%20any%20help%20or%20have%20questions,%20feel%20free%20to%20reach%20out.%20%F0%9F%98%8A"
+ target="_blank" class="whatsapp-button">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="20" height="20">
+                            Send Message
+                        </a> -->
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+  <script>
+        let sortAscending = true;
+
+        function sortMembersByExpiry() {
+            const memberList = document.getElementById("memberList");
+            const members = Array.from(memberList.getElementsByClassName("member"));
+
+            members.sort(function(a, b) {
+                const expiryA = new Date(a.getAttribute('data-expiry'));
+                const expiryB = new Date(b.getAttribute('data-expiry'));
+
+                return sortAscending ? expiryA - expiryB : expiryB - expiryA;
+            });
+
+            // Reorder the members in the list
+            members.forEach(member => memberList.appendChild(member));
+
+            // Toggle sort direction
+            sortAscending = !sortAscending;
+        }
+         // Initialize Materialize form elements
+        document.addEventListener('DOMContentLoaded', function() {
+            M.updateTextFields();
+        });
+
+        function filterMembers() {
+            const filterAll = document.getElementById("filterAll").checked;
+            const filterActive = document.getElementById("filterActive").checked;
+            const filterInactive = document.getElementById("filterInactive").checked;
+            const memberList = document.getElementById("memberList");
+            const listItems = memberList.getElementsByTagName("li");
+
+            for (let i = 0; i < listItems.length; i++) {
+                const listItem = listItems[i];
+                const isActive = listItem.classList.contains("active");
+                const isInactive = listItem.classList.contains("inactive");
+
+                if (filterAll) {
+                    listItem.style.display = "block";
+                } else if (filterActive && isActive) {
+                    listItem.style.display = "block";
+                } else if (filterInactive && isInactive) {
+                    listItem.style.display = "block";
+                } else {
+                    listItem.style.display = "none";
+                }
+            }
+        }
+
+        function searchMembers() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const memberList = document.getElementById("memberList");
+            const listItems = memberList.getElementsByTagName("li");
+
+            for (let i = 0; i < listItems.length; i++) {
+                const listItem = listItems[i];
+                const memberName = listItem.textContent.toLowerCase();
+
+                if (memberName.includes(searchInput)) {
+                    listItem.style.display = "block";
+                } else {
+                    listItem.style.display = "none";
+                }
+            }
+        }
+    </script>
+     <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPage = 10; // Number of members per page
+        const memberList = document.getElementById('memberList');
+        const listItems = Array.from(memberList.getElementsByClassName('member'));
+        const totalPages = Math.ceil(listItems.length / itemsPerPage);
+        let currentPage = 1;
+
+        function renderPagination() {
+            const paginationDiv = document.getElementById('pagination');
+            paginationDiv.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.className = 'page-btn';
+                pageButton.onclick = () => changePage(i);
+                if (i === currentPage) pageButton.style.fontWeight = 'bold';
+                paginationDiv.appendChild(pageButton);
+            }
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
+
+            listItems.forEach((item, index) => {
+                item.style.display = index >= startIdx && index < endIdx ? 'block' : 'none';
+            });
+
+            renderPagination();
+        }
+
+        function searchMembers() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            listItems.forEach(item => {
+                const memberName = item.textContent.toLowerCase();
+                item.style.display = memberName.includes(searchInput) ? 'block' : 'none';
+            });
+        }
+
+        // Initialize
+        changePage(1);
+        renderPagination();
+
+        document.getElementById('searchInput').addEventListener('input', searchMembers);
+    });
+</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+{% endblock staffdashboard_content %}

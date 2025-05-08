@@ -1,0 +1,298 @@
+{% extends "dashboard.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member List</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h3 {
+            text-align: center;
+            color: #fff;
+        }
+
+        .filter-options, .search {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-options label {
+            font-weight: bold;
+        }
+
+        .checkbox-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .sort-button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .sort-button:hover {
+            background-color: #0056b3;
+        }
+
+        .member-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+            justify-content: space-between;
+        }
+
+        .member {
+            flex: 1 1 100%;
+            background-color: #333;
+            color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .member-content {
+            padding: 20px;
+            color: #fff;
+        }
+
+        .member-number {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #fff;
+        }
+
+        .member-name {
+            font-size: 1.1em;
+            margin: 5px 0;
+            color: #fff;
+        }
+
+        .expiry-date {
+            font-size: 0.9em;
+            color: #ff6f00;
+        }
+
+        .whatsapp-button {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            background-color: #25D366;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .whatsapp-button img {
+            margin-right: 8px;
+        }
+
+        .about-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        @media only screen and (min-width: 768px) {
+            .member {
+                flex: 1 1 calc(48% - 20px);
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            .member {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3>Member List</h3>
+        <h8>{{ user_profile.user.username }}</h8>
+        <a href="{% url 'generate_member_report_pdf' %}" class="btn btn-primary">Report</a>
+
+        <!-- Filter Options -->
+        <div class="filter-options">
+            <label>Filter Members:</label>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" id="filterAll" onclick="filterMembers()" />
+                    <span>All</span>
+                </label>
+                <label>
+                    <input type="checkbox" id="filterActive" onclick="filterMembers()" />
+                    <span>Active</span>
+                </label>
+                <label>
+                    <input type="checkbox" id="filterInactive" onclick="filterMembers()" />
+                    <span>Inactive</span>
+                </label>
+            </div>
+        </div>
+
+  <!-- Sorting Buttons -->
+    <div class="sort-buttons">
+        <a href="?sort_by=reg_no&order={{ order_for_reg_no }}" class="sort-button">
+            Sort by Registration Number
+        </a>
+        <a href="?sort_by=expiry_date&order={{ order_for_expiry_date }}" class="sort-button">
+            Sort by Expiry Date
+        </a>
+    </div>
+
+        <!-- Search Bar -->
+        <div class="search">
+            <form method="get" action="">
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ search_query }}"
+                    placeholder="Search by Name, Phone, Reg No, or Unique Number">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+ <!-- Search input -->
+        <div class="search">
+            <input type="text" id="searchInput" oninput="searchMembers()" placeholder="Live Search">
+        </div>
+        <!-- Member List -->
+        <ul id="memberList" class="member-list">
+            {% for member, recent_payment in active_members %}
+             <a href="{% url 'member_detail' member.pk %}">
+            <li class="member active" data-expiry="{{ recent_payment.expiry_date }}">
+                <div class="member-content">
+                    {% if member.image %}
+                    <img src="{{ member.image.url }}" alt="{{ member.name }}" class="about-image">
+                    {% endif %}
+                    <div class="member-number">{{ member.unique_number }} - {{ member.reg_no }}</div>
+                    <div class="member-name">{{ member.name }}</div>
+                    <div class="member-number">{{ member.phone }}</div>
+                    <div class="expiry-date" style="color: {% if recent_payment.expiry_date < today %}red{% else %}green{% endif %};">
+                        {{ recent_payment.expiry_date }}
+                    </div>
+                    </a>
+                    <a href="https://wa.me/91{{ member.phone }}?text=Hello%20{{ member.name }}%20..." class="whatsapp-button">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="20" height="20">
+                        Send Message
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+
+            {% for member, recent_payment in inactive_members %}
+             <a href="{% url 'member_detail' member.pk %}">
+            <li class="member inactive" data-expiry="{{ recent_payment.expiry_date }}">
+                <div class="member-content">
+                    {% if member.image %}
+                    <img src="{{ member.image.url }}" alt="{{ member.name }}" class="about-image">
+                    {% endif %}
+                    <div class="member-number">{{ member.unique_number }} - {{ member.reg_no }}</div>
+                    <div class="member-name">{{ member.name }}</div>
+                    <div class="member-number">{{ member.phone }}</div>
+                    <div class="expiry-date" style="color: red;">
+                        {{ recent_payment.expiry_date }}
+                    </div>
+                    </a>
+                    <a href="https://wa.me/91{{ member.phone }}?text=Hello%20{{ member.name }}%20..." class="whatsapp-button">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="20" height="20">
+                        Send Message
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        let sortAscending = true;
+
+        function sortMembersByExpiry() {
+            const memberList = document.getElementById("memberList");
+            const members = Array.from(memberList.getElementsByClassName("member"));
+            members.sort((a, b) => {
+                const dateA = new Date(a.getAttribute("data-expiry"));
+                const dateB = new Date(b.getAttribute("data-expiry"));
+                return sortAscending ? dateA - dateB : dateB - dateA;
+            });
+            members.forEach(member => memberList.appendChild(member));
+            sortAscending = !sortAscending;
+        }
+
+        function sortMembersByRegNo() {
+            const memberList = document.getElementById("memberList");
+            const members = Array.from(memberList.getElementsByClassName("member"));
+            members.sort((a, b) => {
+                const regNoA = a.querySelector(".member-number").innerText.split("-")[1].trim();
+                const regNoB = b.querySelector(".member-number").innerText.split("-")[1].trim();
+                return sortAscending ? regNoA.localeCompare(regNoB) : regNoB.localeCompare(regNoA);
+            });
+            members.forEach(member => memberList.appendChild(member));
+            sortAscending = !sortAscending;
+        }
+
+        function filterMembers() {
+            const filterAll = document.getElementById("filterAll").checked;
+            const filterActive = document.getElementById("filterActive").checked;
+            const filterInactive = document.getElementById("filterInactive").checked;
+            const members = document.querySelectorAll(".member");
+            members.forEach(member => {
+                const isActive = member.classList.contains("active");
+                if (filterAll || (filterActive && isActive) || (filterInactive && !isActive)) {
+                    member.style.display = "block";
+                } else {
+                    member.style.display = "none";
+                }
+            });
+        }
+          function searchMembers() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const memberList = document.getElementById("memberList");
+            const listItems = memberList.getElementsByTagName("li");
+
+            for (let i = 0; i < listItems.length; i++) {
+                const listItem = listItems[i];
+                const memberName = listItem.textContent.toLowerCase();
+
+                if (memberName.includes(searchInput)) {
+                    listItem.style.display = "block";
+                } else {
+                    listItem.style.display = "none";
+                }
+            }
+        }
+
+    </script>
+</body>
+{% endblock %}

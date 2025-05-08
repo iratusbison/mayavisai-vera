@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Login</title>
+    <!-- Include Bootstrap CSS or any other styles -->
+</head>
+<body>
+    <div class="container">
+        <h2>Staff Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <p>Don't have an account? <a href="{% url 'staff_signup' %}">Sign up here</a></p>
+    </div>
+    <!-- Include Bootstrap JS or any other scripts -->
+</body>
+</html>

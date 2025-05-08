@@ -1,0 +1,28 @@
+{% extends 'dashboard.html' %}
+
+{% block dashboard_content %}
+
+  <div class="container">
+    <h4 class="white-text">SubAccounts</h4>
+    <div>
+      <a href="{% url 'add_subprofile' %}" class="waves-effect">
+        <i class="material-icons light">group_add</i>
+        <span class="nav-text">Add SubAccounts</span>
+      </a>
+    </div>
+    <ul class="collection with-header">
+      <li class="collection-header grey darken-3">
+        <h7 class="white-text">SubAccount List</h7>
+      </li>
+      {% for subprofile in subprofiles %}
+        <li class="collection-item grey darken-4">
+          <div class="white-text">{{ subprofile.user.username }}
+            
+            <a href="{% url 'subprofile_delete' subprofile.pk %}" class="secondary-content"><i class="material-icons white-text">delete</i></a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+   
+  </div>
+{% endblock %}

@@ -1,0 +1,6 @@
+
+mysql:   ssh -N -L 3307:udesh.mysql.pythonanywhere-services.com:3306 udesh@ssh.pythonanywhere.com
+
+pythonanywhere bash: ssh -L 3307:udesh.mysql.pythonanywhere-services.com:3306 udesh@ssh.pythonanywhere.com
+
+and enter password

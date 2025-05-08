@@ -1,0 +1,133 @@
+{% extends "dashboard.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance</title>
+    <style>
+    .sidebar-collapse {
+    position: fixed; /* Fixed positioning */
+    top: 5px; /* Adjust the top position as needed */
+    left: 10px; /* Adjust the left position as needed */
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
+        /* Form Styles */
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #333; /* Adjust to dark background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Adjust shadow color */
+            color: #fff; /* Light text on dark background */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #fff; /* Light text on dark background */
+        }
+
+        input[type="text"],
+        button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc; /* Adjust to match dashboard theme */
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #444; /* Darker input background */
+            color: #fff; /* Light text on dark background */
+        }
+
+        button {
+            background-color: #007bff; /* Adjust to dashboard accent color */
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100px; /* Adjust button width */
+            margin: 0 auto; /* Center button horizontally */
+            display: block; /* Ensure button takes up full width */
+            margin-top: 20px; /* Add space above the button */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Adjust hover color */
+        }
+
+        /* List Button Styles */
+        .list-button {
+            display: block;
+            width: 150px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Adjust to dashboard accent color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px; /* Add space above the button */
+        }
+
+        .list-button:hover {
+            background-color: #45a049; /* Adjust hover color */
+        }
+
+        /* Messages Styles */
+        ul {
+            list-style: none;
+
+            color: #fff; /* Light text on dark background */
+        }
+
+        li {
+
+            color: #fff; /* Light text on dark background */
+        }
+
+        li.error {
+            color: red;
+        }
+
+        li.success {
+            color: green;
+        }
+        .member-image {
+    width: 100px;  /* Set a suitable width */
+    height: auto;  /* Maintain aspect ratio */
+    border-radius: 50%; /* Optional: to make the image circular */
+}
+
+    </style>
+</head>
+<body>
+  <center>  <h3>Mark Attendance</h3></center>
+    <center>
+    {% for message in messages %}
+        <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</div>
+    {% endfor %}
+    {% if member_image %}
+    <div class="member-info">
+        <img src="{{ member_image }}" alt="Image of {{ member.name }}" class="member-image" />
+
+    </div>
+{% endif %}
+
+    </center>
+    <form method="post">
+        {% csrf_token %}
+        <label for="identifier">Enter Unique Number or Name:</label>
+        <input type="text" id="identifier" name="identifier" required>
+        <button type="submit">OK</button>
+    </form><br>
+    <a href="{% url 'attendance_list' %}" class="list-button">List</a>
+    <br>
+     <a href="{% url 'qr_mark_attendance_by_scan' %}" class="list-button" target='_blank'>scan to mark attendance</a><br>
+  <center>  <p>Today's Total Attendance: {{ total_attendance_today }}</p> </center>
+</body>
+{% endblock dashboard_content %}

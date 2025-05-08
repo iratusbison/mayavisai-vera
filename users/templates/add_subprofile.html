@@ -1,0 +1,23 @@
+{% extends 'dashboard.html' %}
+
+{% block dashboard_content %}
+<head>
+    <title>Add Subprofile</title>
+    <style>
+        .button {
+  background-color: #04AA6D; /* Green */
+  border: none;
+  color: white;
+  
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Subprofile</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button">Add Subprofile</button>
+    </form>
+</body>
+{% endblock %}

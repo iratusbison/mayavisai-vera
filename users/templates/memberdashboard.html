@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!-- Custom Neon CSS -->
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            background: #222;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #333;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.6);
+        }
+        h1, h2 {
+            color: #ff00ff;
+            text-shadow: 0 0 5px #ff00ff;
+        }
+        p {
+            color: #eee;
+        }
+        .icon {
+            color: #ff00ff;
+            margin-right: 10px;
+            text-shadow: 0 0 5px #ff00ff;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #444;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .section {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ member.name }}</h1>
+        
+        <div class="section">
+            <h2><i class="fas fa-user icon"></i>Your Profile</h2>
+            <p><strong>Registration Number:</strong> {{ member.reg_no }}</p>
+            <p><strong>Email:</strong> {{ member.email }}</p>
+            <p><strong>Phone:</strong> {{ member.phone }}</p>
+            <p><strong>Emergency Contact:</strong> {{ member.emergency_number }}</p>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-calendar-check icon"></i>Your Attendance</h2>
+            {% if attendances %}
+                <ul>
+                    {% for attendance in attendances %}
+                        <li>{{ attendance.date }} - {{ attendance.status }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No attendance records found.</p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-credit-card icon"></i>Your Payment</h2>
+            {% if payment %}
+                <p><strong>Last Payment Date:</strong> {{ payment.payment_date }}</p>
+                <p><strong>Amount Paid:</strong> {{ payment.amount }}</p>
+                <p><strong>Expiry Date:</strong> {{ payment.expiry_date }}</p>
+            {% else %}
+                <p>No payment records found.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

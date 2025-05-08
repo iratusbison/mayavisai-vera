@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+{{ "StaffDashboard" }}
+{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/materialize.css' %}">
+<link rel="stylesheet" href="{% static 'perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.min.css' %}">
+<link rel="stylesheet" href="{% static 'dropify/css/dropify.min.css' %}">
+<style>
+  /* Dark Mode Styles */
+  body {
+    background-color: #1a1a1a;
+    color: #ffffff; /* Light text on a dark background */
+  }
+
+  .nav-active {
+    border-right: solid .3rem #263238;
+  }
+
+  .search-wrapper {
+    position: relative;
+  }
+
+  .search-wrapper .label-icon {
+    position: absolute;
+    bottom: 30%;
+  }
+
+  .search-wrapper input[type="search"] {
+    padding-left: 2.5rem;
+    width: calc(100% - 2.5rem);
+  }
+
+  table.clean tr {
+    border: none;
+  }
+
+  .input-field input[type=text]:focus + label {
+    color: #001eff;
+  }
+
+  .input-field input[type=text]:focus {
+    border-bottom: 1px solid #001eff;
+    box-shadow: 0 1px 0 0 #001eff;
+  }
+
+  /* Improve the styling for your cards and other elements here */
+  .card {
+    background-color: #333; /* Darker card background */
+    color: #fff; /* Light text on a dark card background */
+    border-radius: 10px; /* Add rounded corners to cards */
+  }
+
+  /* Style the side navigation bar */
+  #slide-out {
+    background-color: #263238; /* Dark background color for the sidebar */
+    color: #ffffff; /* Light text color for sidebar items */
+  }
+
+  #slide-out a {
+    color: #ffffff;
+  }
+
+  /* Light icon colors for dark theme */
+  .material-icons.light {
+    color: #ffffff !important;
+  }
+
+  /* Adjust logo size and text size */
+  .logo-wrapper a {
+    display: flex;
+    align-items: center;
+    padding: 10px; /* Add padding to adjust logo position */
+  }
+
+  .logo-wrapper img {
+    width: 60px; /* Adjust logo width */
+    height: auto;
+    margin-right: 10px;
+  }
+
+  .logo-text {
+    color: #FFD700; /* Golden text color */
+    font-size: 24px; /* Adjust text size */
+  }
+
+  /* Increase the size of the sidebar collapse button */
+  .sidebar-collapse.btn-floating {
+    width: 45px; /* Adjust the width */
+    height: 45px; /* Adjust the height */
+  }
+
+  .sidebar-collapse.btn-floating i {
+    font-size: 30px; /* Adjust the icon size */
+    line-height: 45px; /* Center the icon vertically */
+  }
+
+</style>
+
+{% block staffdashboard_styles %}
+<style>
+  /* Artistic Styles */
+  .card {
+    background-color: #3a0e0e; /* Dark red background for cards */
+  }
+
+  .card-title a {
+    color: #FFA500; /* Golden text color for card titles with links */
+  }
+
+  .card-content p {
+    color: #ffffff; /* White text color for card content */
+  }
+
+  /* Decorative Element for the "Art" Section */
+  .artistic-element {
+    font-size: 32px;
+    margin-right: 10px;
+  }
+
+  /* Add some custom styling for your artistic theme */
+  /* For example, you can add artistic-related background images or icons here */
+</style>
+{% endblock staffdashboard_styles %}
+{% endblock styles %}
+
+{% block content %}
+<header id="header" class="page-topbar">
+  <!-- start header nav-->
+  <div class="navbar-fixed">
+    <ul class="right">
+
+      <a href="{% url 'profile' %}" class="waves-effect waves-block waves-light profile-button" title="Profile">
+        <!-- Profile icon -->
+        <i class="material-icons light">account_circle</i>
+
+      </a>
+
+  </ul>
+    <nav class="navbar-color grey darken-4">
+      <div class="nav-wrapper">
+    <center><h4> <a href="{% url 'staffdashboard' %}" title="Dashboard">{{ user_profile }}</a>  </h4> </center>
+
+
+      </div>
+
+    </nav>
+
+  </div>
+
+
+
+  <!-- end header nav-->
+</header>
+
+
+<div id="main">
+  <!-- START WRAPPER -->
+  <div class="wrapper">
+    <!-- START LEFT SIDEBAR NAV-->
+    <aside id="left-sidebar-nav">
+      <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y"
+        style="transform: translateX(0%);">
+        <li class="no-padding">
+  <ul class="" data-collapsible="accordion">
+    <li class="bold">
+      <a href="{% url 'staffdashboard' %}" class="">
+        <span class="nav-text"><i class="fas fa-home"></i> Dashboard </span>
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="bold">
+  <a href="{% url 'sadd_member' %}" class="waves-effect ">
+    <i class="material-icons light">person_add</i>
+    <span class="nav-text">Add Member</span>
+  </a>
+</li>
+            <li class="bold">
+              <a href="{% url 'smember_list' %}" class="waves-effect {% if active_tab == 'item' %}nav-active{% endif %}">
+                <i class="material-icons light">group</i>
+                <span class="nav-text">Members</span>
+              </a>
+            </li>
+            <li class="bold">
+              <a href="{% url 'smark_attendance' %}" class="waves-effect {% if active_tab == 'sale' %}nav-active{% endif %}">
+                <i class="material-icons light">event_note</i>
+                <span class="nav-text">Mark Attendance</span>
+              </a>
+            </li>
+            <li class="bold">
+              <a href="{% url 'spayment_holding_list' %}" class="waves-effect {% if active_tab == 'restock' %}nav-active{% endif %}">
+                <i class="material-icons light">receipt</i>
+                <span class="nav-text">Holding payments</span>
+              </a>
+            </li>
+
+
+
+
+
+
+            <li class="bold">
+              <a href="{% url 'sattendance_list' %}" class="waves-effect {% if active_tab == 'print' %}nav-active{% endif %}">
+                <i class="material-icons light">print</i>
+                <span class="nav-text">Attendance List</span>
+              </a>
+            </li>
+
+
+
+
+
+
+       <!--<li class="bold">
+            <a href="{% url 'archive_list' %}" class="waves-effect {% if active_tab == 'item' %}nav-active{% endif %}">
+              <i class="material-icons light">group</i>
+              <span class="nav-text">Archived Members</span>
+            </a>
+          </li>-->
+          <li class="bold">
+            <a href="{% url 'spersonal_archive_list' %}" class="waves-effect {% if active_tab == 'item' %}nav-active{% endif %}">
+              <i class="material-icons light">archive</i>
+              <span class="nav-text">Archived Members</span>
+            </a>
+          </li>
+
+
+    <li class="bold">
+              <a href="{% url 'staff_mark_attendance' %}" target="_blank" class="waves-effect {% if active_tab == 'sale' %}nav-active{% endif %}">
+                <i class="material-icons light">event_note</i>
+                <span class="nav-text">Staff Log</span>
+              </a>
+            </li>
+
+        <li>
+          <a href="{% url 'stafflogout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
+            <span class="nav-text">exit</span>
+            <i class="material-icons light">exit_to_app</i>
+          </a>
+        </li>
+        <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;">
+          <div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps-scrollbar-y-rail" style="top: 0px; height: 529.333px; right: 3px;">
+          <div class="ps-scrollbar-y" style="top: 0px; height: 446px;"></div>
+        </div>
+      </ul>
+      <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only amber darken-4">
+        <i class="material-icons">menu</i>
+      </a>
+    </aside>
+
+    <!-- END LEFT SIDEBAR NAV-->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+    <!-- START CONTENT -->
+    {% block staffdashboard_content %}
+    <section id="content">
+      <!-- start container -->
+      <div class="container">
+        <div class="row">
+          <div class="col s12 m6 l3">
+            <div class="card" style="background-color: #348538;">
+              <div class="card-content white-text">
+                <span class="card-title">
+                  <a href="{% url 'smember_list' %}" style="color: #ffffff;">Active Members</a>
+                </span>
+                <p style="color: #ffffff;">Active Members: {{ total_active_members }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6 l3">
+            <div class="card" style="background-color: #11519b;">
+              <div class="card-content white-text">
+                <span class="card-title">
+                  <a href="{% url 'smember_list' %}" style="color: #ffffff;">Inactive Members</a>
+                </span>
+                <p style="color: #ffffff;">Inactive Members: {{ total_inactive_members }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6 l3">
+            <div class="card" style="background-color: #B71C1C;">
+              <div class="card-content white-text">
+                <span class="card-title">
+                  <a href="{% url 'smark_attendance' %}" style="color: #ffffff;">Mark Attendance</a>
+                </span>
+                <p style="color: #ffffff;">Total Attendance Today: {{ total_attendance_today }}</p>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6 l3">
+            <div class="card" style="background-color: #4e1472;">
+              <div class="card-content white-text">
+                <span class="card-title">
+                  <a href="{% url 'spersonal_archive_list' %}" style="color: #ffffff;">Archived Members</a>
+                </span>
+                <p style="color: #ffffff;">Archived Members: {{ personal_archived_members }}</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- end container -->
+    </section>
+
+
+    {% endblock staffdashboard_content %}
+    <!-- END CONTENT -->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+  </div>
+  <!-- END WRAPPER -->
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/materialize.min.js' %}"></script>
+<script src="{% static 'perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'dropify/js/dropify.min.js' %}"></script>
+<script type="text/javascript">
+  $(window).ready(() => {
+    $('.dropify').dropify();
+  });
+</script>
+{% if messages %}
+<script>
+  $(document).ready(() => {
+    {% for message in messages %}
+      M.toast({
+        html: `{{ message|escape }}`,
+        classes: `{{ message.tags }}`,
+        displayLength: 1500
+      })
+    {% endfor %}
+  })
+</script>
+{% endif %}
+{% block staffdashboard_scripts %}
+{% endblock staffdashboard_scripts %}
+{% endblock scripts %}

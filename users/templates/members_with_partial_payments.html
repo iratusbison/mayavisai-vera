@@ -1,0 +1,10 @@
+{% extends "dashboard.html" %}
+
+{% block dashboard_content %}
+  <h2>Members with Partial Payments</h2>
+  <ul>
+    {% for member in members %}
+      <li><a href="{% url 'update_payment' member.id %}">{{ member.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

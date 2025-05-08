@@ -1,0 +1,158 @@
+{% extends "dashboard.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment List - All Members</title>
+    <style>
+    .sidebar-collapse {
+    position: fixed; /* Fixed positioning */
+    top: 5px; /* Adjust the top position as needed */
+    left: 10px; /* Adjust the left position as needed */
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a; /* Dark background color */
+            color: #ffffff; /* Light text on dark background */
+        }
+
+        /* Header Styles */
+        h5 {
+            text-align: center;
+            margin-top: 20px;
+            color: #ffa704; /* Golden text color */
+        }
+
+        /* Form Styles */
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #333; /* Darker form background */
+            padding: 5px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #ffffff; /* White text color */
+        }
+
+        input[type="date"],
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #333; /* Darker input background */
+            color: #ffffff; /* White text color */
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #333; /* Darker table background */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #ffffff; /* White text color */
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #263238; /* Dark background for table header */
+        }
+
+        /* Download Links Styles */
+        .download-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .download-links a {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-links a:hover {
+            background-color: #0056b3;
+        }
+        .sidebar-collapse {
+            position: fixed;
+            top: 5px;
+            left: 10px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <h5>Payment List - All Members</h5>
+    {% if total_payment %}
+        <p>Total Payment: ₹{{ total_payment }}</p>
+    {% endif %}
+
+    <form action="{% url 'payment_list_all' %}" method="get">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" required>
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" required>
+        <button type="submit">Filter</button>
+    </form>
+    <div class="download-links">
+        <a href="{% url 'payment_list_all' %}?start_date={{ start_date|date:'Y-m-d' }}&end_date={{ end_date|date:'Y-m-d' }}&format=pdf">Download as PDF</a>
+        <a href="{% url 'payment_list_all' %}?start_date={{ start_date|date:'Y-m-d' }}&end_date={{ end_date|date:'Y-m-d' }}&format=excel">Download as Excel</a>
+    </div>
+    <table>
+        <thead>
+            <tr><th></th>
+                <th>ID</th>
+                <th>Member Name</th>
+                <th>Payment ID</th>
+                <th>Receipt NO</th>
+                <th>Payment Type</th>
+                <th>Amount</th>
+                <th>Payment Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            <tr><td></td>
+                <td>{{ payment.member.unique_number }}</td>
+                <td><a href="{% url 'member_detail' payment.member.pk %}">{{ payment.member.name }}</a></td>
+                <td>{{ payment.pay_id }}</td>
+                <td>{{ payment.receipt_id }}</td>
+                <td>{{ payment.payment_type }}</td>
+                <td>{{ payment.amount }}</td>
+                <td>{{ payment.payment_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+</body>
+{% endblock dashboard_content %}

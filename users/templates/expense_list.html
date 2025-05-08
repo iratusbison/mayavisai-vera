@@ -1,0 +1,67 @@
+{% extends "dashboard.html" %}
+
+{% block dashboard_content %}
+<div style="text-align: center;">
+    <h4 style="color: #ffffff; font-size: 24px; padding: 10px;">
+        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">money_off</i>
+        Expense List
+    </h4>
+    <h5 style="color: #ffffff; margin-top: 10px;">Total Expenses: ₹ {{ total_expenses|default:"0.00" }}</h5>
+
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <table class="table table-bordered" style="margin-top: 20px; background-color: #333; color: #ffffff;">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">S.No</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td style="text-align: center;">{{ forloop.counter }}</td>
+                    <td>{{ expense.date }}</td>
+                    <td>{{ expense.description }}</td>
+                    <td>₹ {{ expense.amount }}</td>
+                    <td>
+                        <a href="{% url 'delete_expense' expense.id %}" style="color: #ff9999;">
+                            <i class="material-icons" style="margin-right: 5px;">delete</i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No expenses yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+        <a href="{% url 'add_expense' esection.id %}" style="color: #ffffff; display: flex; align-items: center;">
+            <i class="material-icons" style="margin-right: 5px;">add</i> Add Expense
+        </a>
+
+        <a href="{% url 'generate_pdf' esection.id %}" style="color: #ffffff; background-color: #2196F3; padding: 5px 10px; border-radius: 5px; display: flex; align-items: center;">
+            Generate PDF
+            <i class="material-icons" style="margin-left: 5px;">file_download</i>
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Style hyperlink text color and remove underlines */
+    a {
+        text-decoration: none;
+    }
+
+    /* Ensure headline and subheading are white */
+    h4, h5 {
+        margin: 10px 0;
+        color: #ffffff;
+    }
+</style>
+{% endblock %}

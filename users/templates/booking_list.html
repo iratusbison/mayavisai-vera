@@ -1,0 +1,176 @@
+{% extends "bdashboard.html" %}
+
+{% block bdashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking List</title>
+    <style>
+        .date-input {
+          position: relative;
+          display: inline-block;
+    }
+
+       .calendar-icon {
+         position: absolute;
+         top: 50%;
+         right: 5px;
+         transform: translateY(-50%);
+         cursor: pointer;
+    }
+        /* Add custom styles for the Booking List */
+        body {
+            background-color: #333; /* Dark background color */
+            color: #f4f4f4; /* Light text color */
+        }
+
+        h4 {
+            color: #007bff; /* Blue heading color */
+        }
+
+        /* Style for the form and buttons */
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-right: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input, button {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Style for the search form */
+        #search_form {
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Style for the booking table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        td {
+            background-color: #333;
+        }
+
+        /* Style for the link in the rooms column */
+        #booking_table a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        /* Responsive styles for smaller screens */
+        @media only screen and (max-width: 600px) {
+            table, th, td {
+                font-size: 14px;
+            }
+        }
+    </style>
+
+
+</head>
+<body>
+<script>
+    function toggleCalendar(inputId) {
+        document.getElementById(inputId).click();
+    }
+
+    function searchFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("booking_table");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0]; // Change index to the column you want to search (0 for Booking ID)
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+<form method="get" action="{% url 'booking_list' %}">
+    <label for="checkin_datetime">Check-in Date:</label>
+    <input type="date" id="checkin_datetime" name="checkin_datetime" value="{{ checkin_datetime|date:'Y-m-d' }}" required>
+
+    <label for="checkout_datetime">Check-out Date:</label>
+    <input type="date" id="checkout_datetime" name="checkout_datetime" value="{{ checkout_datetime|date:'Y-m-d' }}" required>
+
+    <button type="submit">Filter</button>
+</form> <a href="{% url 'generate_pdf_book' %}?checkin_datetime={{ checkin_datetime|date:'Y-m-d' }}&checkout_datetime={{ checkout_datetime|date:'Y-m-d' }}" class="btn btn-primary">Download PDF</a>
+
+<p>Total Revenue: ₹{{ total_revenue|default:"0.00" }}</p>
+
+<h4 style="color: #ffffff; font-size: 24px; background-color: #007bff; padding: 10px; border-radius: 5px;">
+    <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">money_off</i>
+    Booking List
+</h4>
+
+<input type="text" id="searchInput" onkeyup="searchFunction()" placeholder="Search for Booking ID...">
+
+<table id="booking_table">
+    <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>CheckIn</th>
+            <th>CheckOut</th>
+            <th>Price</th>
+            <th>GST</th>
+            <th>Rooms</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking_details in bookings %}
+    <tr onclick="window.location='{% url 'booking_detail' booking_id=booking_details.booking.user_specific_id %}';" style="cursor:pointer;">
+        <td>{{ booking_details.booking.user_specific_id }}</td>
+        <td>{{ booking_details.checkin_datetime }}</td>
+        <td>{{ booking_details.checkout_datetime }}</td>
+        <td>₹{{ booking_details.price }}</td>
+        <td>{{ booking_details.gst }}</td>
+        <td>
+            {% if booking_details.rooms %}
+                {{ booking_details.rooms}}
+            {% else %}
+                No rooms booked
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+
+</body>
+{% endblock %}

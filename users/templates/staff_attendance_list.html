@@ -1,0 +1,295 @@
+<!-- /*
+* Template Name: Minimal
+* Template Author: Untree.co
+* Author URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+  .service-box {
+       background-color: #fff;
+       border: 1px solid #000000;
+       border-radius: 10px;
+       padding: 20px;
+       margin: 15px 0;
+       text-align: center;
+       transition: all 0.3s ease-in-out;
+   }
+   .service-box:hover {
+       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+   }
+   .icon {
+       font-size: 40px;
+       color: #17a2b8;
+       margin-bottom: 15px;
+   }
+   h2 {
+       font-size: 28px;
+       font-weight: bold;
+       color: black; /* Dark color for the title */
+   }
+   .price {
+       font-size: 24px;
+       font-weight: bold;
+       color: #28a745;
+   }
+   .extra-cost {
+       font-size: 16px;
+       color: #000000;
+   }
+   .top {
+       font-size: 30px;
+       font-weight: bold;
+       color: #000000;
+   }
+   .topp {
+       font-size: 40px;
+       font-weight: bold;
+       color: #000000;
+   }
+</style>
+
+    <style>
+        .quote-section {
+  margin-top: 20px;
+  font-style: italic;
+  color: #333;
+}
+
+#random-quote {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="{% static 'favicon.png' %}">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=PT+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+  <link rel="stylesheet" href="{% static 'css/minimal/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/minimal/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/minimal/owl.theme.default.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/minimal/jquery.fancybox.min.css' %}">
+  <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+  <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css' %}">
+  <link rel="stylesheet" href="{% static 'css/minimal/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'css/minimal/style.css' %}">
+
+  <title>MayaVisai</title>
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="100">
+
+  <div class="lines-wrap">
+    <div class="lines-inner">
+      <div class="lines"></div>
+    </div>
+  </div>
+  <!-- END lines -->
+
+  <div class="site-mobile-menu site-navbar-target">
+    <div class="site-mobile-menu-header">
+      <div class="site-mobile-menu-close">
+        <span class="icofont-close js-menu-toggle"></span>
+      </div>
+    </div>
+    <div class="site-mobile-menu-body"></div>
+  </div>
+
+  <nav class="site-nav dark mb-5 site-navbar-target">
+    <div class="container">
+      <div class="site-navigation">
+        <a href="" class="logo m-0">
+          <img src="{% static 'images/logo.jpeg' %}" alt="MayaVisai Logo" style="height: 50px; width: auto;">
+          MayaVisai<span class="text-primary">.</span>
+        </a>
+
+        <ul class="js-clone-nav d-none d-lg-inline-none site-menu float-right site-nav-wrap">
+
+<div> <p class="gsap-reveal-hero"><a href="{% url 'profile' %}" class="btn btn-outline-black">profile</a></p></div>
+<div> <p class="gsap-reveal-hero"><a href="{% url 'staff_attendance_list' %}" class="btn btn-outline-black">Staff Attendance List</a></p></div>
+
+<div> <p class="gsap-reveal-hero"><a href="{% url 'staff_list' %}" class="btn btn-outline-black">Staff List</a></p></div>
+
+          <li> <!--<a href="#contact-section" class="nav-link">Contact us</a></li>-->
+        </ul>
+
+        <a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-inline-block" data-toggle="collapse" data-target="#main-navbar">
+          <span></span>
+        </a>
+
+      </div>
+    </div>
+  </nav>
+
+  <div class="untree_co-section pb-0" id="home-section">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-md-7">
+
+
+      <nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand" href="#">Attendance System</a>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+           <i class="fas fa-list icon-custom"></i> Staff Attendance List
+        </div>
+        <!-- Search input -->
+        <div class="search">
+            <input type="text" id="searchInput" oninput="searchAttendance()" placeholder="Search">
+
+        </div>
+        <div class="card-body">
+    <form id="attendanceForm" method="GET">
+        <div class="form-row">
+            <div class="col">
+                <label for="start_date">Start Date</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ request.GET.start_date }}">
+            </div>
+            <div class="col">
+                <label for="end_date">End Date</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request.GET.end_date }}">
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-hover mt-3">
+        <thead>
+            <tr>
+                <th scope="col"><i class="fas fa-user icon-custom"></i> Staff</th>
+                <th scope="col"><i class="fas fa-calendar-day icon-custom"></i> Date</th>
+                <th scope="col"><i class="fas fa-clock icon-custom"></i> Time In</th>
+                <th scope="col"><i class="fas fa-clock icon-custom"></i> Time Out</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attendance in attendances %}
+                <tr>
+                    <td>{{ attendance.staff.username }}</td>
+                    <td>{{ attendance.date }}</td>
+                    <td>{{ attendance.time_in|default:"-" }}</td>
+                    <td>{{ attendance.time_out|default:"-" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+        <div class="card-footer">
+             <p>Searched Staff Total: <strong id="searchedTotal">0</strong></p>
+            <p>Total Attendance of the filtered date : <strong>{{ total_attendance }}</strong></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function searchAttendance() {
+        const searchInput = document.getElementById("searchInput").value.toLowerCase();
+        const table = document.querySelector("table");
+        const rows = table.querySelectorAll("tbody tr");
+        let searchedTotal = 0;
+
+        rows.forEach(row => {
+            const staffCell = row.children[0].textContent.toLowerCase();
+            const dateCell = row.children[1].textContent.toLowerCase();
+
+            if (staffCell.includes(searchInput) || dateCell.includes(searchInput)) {
+                row.style.display = "";
+                searchedTotal++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        // Update the searched total count
+        document.getElementById("searchedTotal").textContent = searchedTotal;
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('attendanceForm');
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+
+        function updateAttendanceList() {
+            form.submit();
+        }
+
+        // Add event listeners to date input fields
+        startDateInput.addEventListener('change', updateAttendanceList);
+        endDateInput.addEventListener('change', updateAttendanceList);
+    });
+</script>
+
+
+
+        <div class="row mt-5">
+          <div class="col-12 text-center">
+            <!--
+              **==========
+              NOTE:
+              Please don't remove this copyright link unless you buy the license here https://untree.co/license/
+
+              **==========
+            -->
+            <p class="mb-0">MayaVisai &copy;2023. All Rights Reserved. <br>Designed by <a href="https://untree.co">Untree.co</a>
+          </div>
+        </div>
+      </div> <!-- /.container -->
+    </div> <!-- /.site-footer -->
+
+    <div id="overlayer"></div>
+    <div class="loader">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+
+
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/jquery.fancybox.min.js' %}"></script>
+<script src="{% static 'js/aos.js' %}"></script>
+<script src="{% static 'js/wave-animate.js' %}"></script>
+<script src="{% static 'js/circle-progress.js' %}"></script>
+<script src="{% static 'js/imagesloaded.pkgd.js' %}"></script>
+<script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+<script src="{% static 'js/TweenMax.min.js' %}"></script>
+<script src="{% static 'js/ScrollMagic.min.js' %}"></script>
+<script src="{% static 'js/scrollmagic.animation.gsap.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+
+  </body>
+
+  </html>
+
+
+
+
+
+

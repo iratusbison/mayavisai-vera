@@ -1,0 +1,309 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up - MayaVisai</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-form-container {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .login-form-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .login-form-header h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            color: #ffffff;
+        }
+        .form-group label {
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            color: #e0e0e0;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            color: #ffffff;
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+        }
+        .form-group input::placeholder,
+        .form-group select::placeholder,
+        .form-group textarea::placeholder {
+            color: #ffffff;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            background-color: #333;
+            border-color: #555;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .form-group i {
+            margin-right: 10px;
+        }
+        .text-muted {
+            color: #aaaaaa !important;
+        }
+        .alert {
+            font-size: 14px;
+        }
+        .terms-conditions {
+            font-size: 12px;
+            color: #bbbbbb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container login-container">
+
+    <div class="card-panel row hoverable login-form-container col-md-6">
+        <div class="login-form-header">
+          <center><h1><img src="{% static 'images/im.png' %}" alt="MayaVisai Logo" style="height: 50px; width: auto;"> MayaVisai - Signup Page</h1></center><br>
+        </div>
+
+        <!-- Display form errors as alerts -->
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div>
+            <p>The username you mention here may be used in the bill/receipt title, so please ensure it is correct.</p>
+            <p>Note: Spaces are not allowed in the username, so please use an appropriate format.</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <i class="fas fa-user"></i>{{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+    <i class="fas fa-lock"></i>{{ form.password1.label_tag }}
+    <div class="input-group">
+        {{ form.password1 }}
+        <div class="input-group-append">
+            <span class="input-group-text">
+                <i class="fas fa-eye-slash toggle-password" style="cursor: pointer;"></i>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <i class="fas fa-lock"></i> Password again:
+    <div class="input-group">
+        {{ form.password2 }}
+        <div class="input-group-append">
+            <span class="input-group-text">
+                <i class="fas fa-eye-slash toggle-password" style="cursor: pointer;"></i>
+            </span>
+        </div>
+    </div>
+</div>
+
+            <div class="form-group">
+                <i class="fas fa-info-circle"></i> Select Management Type:
+                {{ form.management_type }}
+            </div>
+
+            <!-- Additional fields for profile -->
+            <div class="form-group">
+                <label for="phone"><i class="fas fa-phone"></i> Phone:</label>
+                <input type="number" class="form-control" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <p>The location you mention here may be used in the bill/receipt, so please include it.</p>
+                <p>If needed, you can also add details like GSTIN, contact number, etc.</p>
+                <p>To align all details properly on the bill/receipt, use a comma (",") to separate each item, ensuring they appear on new lines.</p>
+                <label for="location"><i class="fas fa-map-marker-alt"></i> Location:</label>
+                <input type="text" class="form-control" id="location" name="location" required>
+            </div>
+
+            <!-- Checkbox for Terms of Service and Privacy Policy -->
+            <div class="form-group">
+                <div class="terms-conditions">
+                    <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                    <label for="agreeTerms">I agree to the 
+                        <a href="#" data-toggle="modal" data-target="#termsModal">Terms of Service</a> and 
+                        <a href="#" data-toggle="modal" data-target="#privacyModal">Privacy Policy</a>.
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal for Terms of Service -->
+<div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="background-color: #1e1e1e; color: #e0e0e0;">
+            <div class="modal-header" style="border-bottom: 1px solid #444;">
+                <h5 class="modal-title" id="termsModalLabel" style="color: #e0e0e0;">Terms of Service</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #e0e0e0;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Insert your Terms of Service content here -->
+               <div class="policy-section">
+   
+
+    <div class="policy-content">
+      <p><strong>Acceptance:</strong> By using our services, you agree to these terms and conditions.</p>
+
+      <p><strong>Account Creation:</strong> You must create an account to use our services. You are responsible for maintaining the confidentiality of your account credentials.</p>
+
+      <p><strong>Prohibited Activities:</strong> You may not use our services for any illegal or harmful purpose.</p>
+
+      <p><strong>Intellectual Property:</strong> All content on our website is our property or the property of our licensors.</p>
+
+      <p><strong>Indemnification:</strong> You agree to indemnify us for any losses or damages arising from your use of our services.</p>
+
+      <p><strong>Termination:</strong> We may terminate your account at any time for the following reasons:</p>
+      <ul>
+        <li><strong>Violation of Terms:</strong> If you violate these terms of service or our policies.</li>
+        <li><strong>Non-Payment:</strong> If you fail to pay any outstanding fees or charges.</li>
+        <li><strong>Inactivity:</strong> If your account remains inactive for an extended period.</li>
+      </ul>
+
+      <p><strong>Notice:</strong> We will provide you with reasonable notice before terminating your account, unless immediate termination is necessary to protect the security of our services or the safety of other users.</p>
+
+      <p><strong>Consequences of Termination:</strong> Upon termination, you will lose access to your account and any data associated with it.</p>
+    </div>
+  </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Privacy Policy -->
+<div class="modal fade" id="privacyModal" tabindex="-1" role="dialog" aria-labelledby="privacyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="background-color: #1e1e1e; color: #e0e0e0;">
+            <div class="modal-header" style="border-bottom: 1px solid #444;">
+                <h5 class="modal-title" id="privacyModalLabel" style="color: #e0e0e0;">Privacy Policy</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #e0e0e0;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Insert your Privacy Policy content here -->
+              <div class="privacy-policy-section">
+
+
+  <div class="policy-section">
+ 
+
+    <div class="policy-content">
+      <p><strong>Data Collection:</strong> We collect personal information from you when you create an account, use our services, or interact with our website. This information may include:</p>
+      <ul>
+        <li>Name</li>
+        <li>Email address</li>
+        <li>Contact information</li>
+        <li>Business information</li>
+      </ul>
+
+      <p><strong>Data Usage:</strong> We use your data to:</p>
+      <ul>
+        <li>Provide and improve our services</li>
+        <li>Manage your account</li>
+        <li>Communicate with you</li>
+        <li>Analyze usage patterns</li>
+      </ul>
+
+      <p><strong>Data Retention:</strong> We retain your data for as long as necessary to provide our services and comply with legal requirements.</p>
+
+      <p><strong>Data Security:</strong> We implement reasonable security measures to protect your data from unauthorized access, disclosure, alteration, or destruction.</p>
+
+      <p><strong>Your Rights:</strong> You have the right to:</p>
+      <ul>
+        <li>Access and correct your personal information</li>
+        <li>Request the deletion of your data</li>
+        <li>Object to the processing of your data</li>
+      </ul>
+
+      <p><strong>Data Breaches:</strong> In the event of a data breach, we will take appropriate steps to notify affected users and mitigate any harm.</p>
+
+      <p><strong>Third-Party Services:</strong> We may use third-party services (e.g., analytics, payment processing) that may collect your data. Please refer to their privacy policies for more information.</p>
+
+      <p><strong>Cookie Policy:</strong> We may use cookies to enhance your user experience. You can manage your cookie preferences through your browser settings.</p>
+    </div>
+  </div>
+
+ 
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.querySelectorAll('.toggle-password').forEach(function(toggle) {
+        toggle.addEventListener('click', function() {
+            const passwordInput = this.closest('.input-group').querySelector('input');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // Toggle the icon
+            if (type === 'password') {
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            } else {
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            }
+        });
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

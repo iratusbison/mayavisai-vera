@@ -1,0 +1,279 @@
+<!-- /*
+* Template Name: Minimal
+* Template Author: Untree.co
+* Author URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+  .service-box {
+       background-color: #fff;
+       border: 1px solid #000000;
+       border-radius: 10px;
+       padding: 20px;
+       margin: 15px 0;
+       text-align: center;
+       transition: all 0.3s ease-in-out;
+   }
+   .service-box:hover {
+       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+   }
+   .icon {
+       font-size: 40px;
+       color: #17a2b8;
+       margin-bottom: 15px;
+   }
+   h2 {
+       font-size: 28px;
+       font-weight: bold;
+       color: black; /* Dark color for the title */
+   }
+   .price {
+       font-size: 24px;
+       font-weight: bold;
+       color: #28a745;
+   }
+   .extra-cost {
+       font-size: 16px;
+       color: #000000;
+   }
+   .top {
+       font-size: 30px;
+       font-weight: bold;
+       color: #000000;
+   }
+   .topp {
+       font-size: 40px;
+       font-weight: bold;
+       color: #000000;
+   }
+</style>
+
+    <style>
+        .quote-section {
+  margin-top: 20px;
+  font-style: italic;
+  color: #333;
+}
+
+#random-quote {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="{% static 'favicon.png' %}">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=PT+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+  <link rel="stylesheet" href="{% static 'css/minimal/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/minimal/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/minimal/owl.theme.default.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/minimal/jquery.fancybox.min.css' %}">
+  <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+  <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css' %}">
+  <link rel="stylesheet" href="{% static 'css/minimal/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'css/minimal/style.css' %}">
+
+  <title>MayaVisai</title>
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="100">
+
+  <div class="lines-wrap">
+    <div class="lines-inner">
+      <div class="lines"></div>
+    </div>
+  </div>
+  <!-- END lines -->
+
+  <div class="site-mobile-menu site-navbar-target">
+    <div class="site-mobile-menu-header">
+      <div class="site-mobile-menu-close">
+        <span class="icofont-close js-menu-toggle"></span>
+      </div>
+    </div>
+    <div class="site-mobile-menu-body"></div>
+  </div>
+
+  <nav class="site-nav dark mb-5 site-navbar-target">
+    <div class="container">
+      <div class="site-navigation">
+        <a href="" class="logo m-0">
+          <img src="{% static 'images/logo.jpeg' %}" alt="MayaVisai Logo" style="height: 50px; width: auto;">
+          MayaVisai<span class="text-primary">.</span>
+        </a>
+
+        <ul class="js-clone-nav d-none d-lg-inline-none site-menu float-right site-nav-wrap">
+<div> <p class="gsap-reveal-hero"><a href="{% url 'profile' %}" class="btn btn-outline-black">profile</a></p></div>
+<div> <p class="gsap-reveal-hero"><a href="{% url 'staff_attendance_list' %}" class="btn btn-outline-black">Staff Attendance List</a></p></div>
+
+<div> <p class="gsap-reveal-hero"><a href="{% url 'staff_list' %}" class="btn btn-outline-black">Staff List</a></p></div>
+<div> <p class="gsap-reveal-hero"><a href="{% url 'edit_profile' %}" class="btn">Edit Profile</a></div>
+
+        </ul>
+
+        <a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-inline-block" data-toggle="collapse" data-target="#main-navbar">
+          <span></span>
+        </a>
+
+      </div>
+    </div>
+  </nav>
+
+  <div class="untree_co-section pb-0" id="home-section">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-md-7">
+
+         </div>
+
+
+    <div class="profile-container">
+        <div><strong>Edit Profile</strong></div>
+
+
+
+<div class="container">
+
+    <form method="POST" action="{% url 'edit_profile' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Update Profile</button>
+    </form>
+</div>
+
+   <div class="site-footer">
+      <div class="container">
+
+        <div class="row">
+        <!--   <div class="col-lg-3">
+            <div class="widget">
+              <h3>Home</h3>
+              <ul class="list-unstyled float-left links">
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+              </ul>
+            </div>
+          </div> --><!-- /.col-lg-3 -->
+
+<div class="quote-section text-center">
+  <p id="random-quote" class="gsap-reveal-hero"></p>
+</div>
+
+          <div class="col-lg-3">
+            <div class="widget">
+              <h3>Contact</h3>
+              <address>Udesh</address>
+              <ul class="list-unstyled links mb-4">
+
+                 
+                <li><a href="mailto:info@mydomain.com">iratusbison@gmail.com</a></li>
+              </ul>
+
+              <h3>Connect</h3>
+              <ul class="list-unstyled social">
+                <li><a href="https://www.instagram.com/udesh_kash/" target="_blank"><span class="icon-instagram"></span></a></li>
+                 <li><a href="https://udesh.onrender.com/" target="_blank"><span class="icon-globe"></span></a></li>
+
+              </ul>
+
+            </div> <!-- /.widget -->
+          </div> <!-- /.col-lg-3 -->
+
+        </div> <!-- /.row -->
+
+
+
+
+
+        <div class="row mt-5">
+          <div class="col-12 text-center">
+            <!--
+              **==========
+              NOTE:
+              Please don't remove this copyright link unless you buy the license here https://untree.co/license/
+
+              **==========
+            -->
+            <p class="mb-0">MayaVisai &copy;2023. All Rights Reserved. <br>Designed by <a href="https://untree.co">Untree.co</a>
+          </div>
+        </div>
+      </div> <!-- /.container -->
+    </div> <!-- /.site-footer -->
+
+    <div id="overlayer"></div>
+    <div class="loader">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const quotes = [
+      "The best way to predict the future is to invent it. – Alan Kay",
+      "Web design is not just about creating pretty things; it’s about creating a functional and enjoyable user experience.",
+      "Technology is best when it brings people together. – Matt Mullenweg",
+      "The Internet is becoming the town square for the global village of tomorrow. – Bill Gates",
+      "Good design is as little design as possible. – Dieter Rams",
+      "Simplicity is the ultimate sophistication. – Leonardo da Vinci",
+      "The web is a great equalizer. – Tim Berners-Lee",
+      "Design is not just what it looks like and feels like. Design is how it works. – Steve Jobs",
+      "Technology is a word that describes something that doesn’t work yet. – Douglas Adams",
+      "The only way to do great work is to love what you do. – Steve Jobs",
+      "It is often the small steps, not the giant leaps, that bring about the most lasting change. -Queen Elizabeth II",
+      "If what you have done yesterday still looks big to you, you haven't done much today. -Mikhail Gorbachev",
+      "In the long run, you make your own luck_ good, bad, or indifferent. -Loretta Lynn"
+    ];
+
+    function getRandomQuote() {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      return quotes[randomIndex];
+    }
+
+    document.getElementById('random-quote').textContent = getRandomQuote();
+  });
+</script>
+
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/jquery.fancybox.min.js' %}"></script>
+<script src="{% static 'js/aos.js' %}"></script>
+<script src="{% static 'js/wave-animate.js' %}"></script>
+<script src="{% static 'js/circle-progress.js' %}"></script>
+<script src="{% static 'js/imagesloaded.pkgd.js' %}"></script>
+<script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+<script src="{% static 'js/TweenMax.min.js' %}"></script>
+<script src="{% static 'js/ScrollMagic.min.js' %}"></script>
+<script src="{% static 'js/scrollmagic.animation.gsap.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+
+  </body>
+
+  </html>
+
+

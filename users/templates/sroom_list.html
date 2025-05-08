@@ -1,0 +1,92 @@
+{% extends "sbdashboard.html" %}
+
+{% block bdashboard_content %}
+<body class="dark-mode">
+    <div style="text-align: center;">
+    <div style="background-color: #3498db; padding: 10px; border-radius: 5px; text-align: center;">
+    <h5 style="color: #ffffff;">
+            <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px;">insert_chart</i>
+            Room List
+        </h5>
+        </div></div>
+    <table class="room-table">
+        <thead>
+            <tr>
+                <th>Room</th>
+
+                <th>Availability</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for room in rooms %}
+            <tr onclick="window.location='{% url 'staff_room_check_list' room.id %}';" style="cursor:pointer;">
+
+
+
+                <td>{{ room.room_number }}</td>
+                <td>
+                    {% if room.booking %}
+                        <div class="booking-info">
+                            <div>ID: {{ room.booking.id }}</div>
+
+                            <div>Date: {{ room.booking.checkout_datetime}}</div>
+                        </div>
+                    {% else %}
+                        No Booking
+                    {% endif %}
+
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <style>/* Dark Mode Styles */
+.dark-mode {
+    background-color: #333;
+    color: #fff;
+}
+
+.room-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.room-table th,
+.room-table td {
+    padding: 10px;
+    border-bottom: 1px solid #666;
+}
+
+.room-table th {
+    text-align: left;
+}
+
+.booking-info {
+    font-size: 14px;
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff; /* blue color for buttons */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.button:hover {
+    background-color: #0056b3; /* darker blue color on hover */
+}
+</style>
+</body>
+{% endblock %}

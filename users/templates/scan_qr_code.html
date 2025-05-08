@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan QR Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <style>
+        /* Styles to make the video fullscreen */
+        video {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+        }
+    </style>
+</head>
+<body>
+    <h2>Scan QR Code</h2>
+    
+    <!-- Video element to display camera feed -->
+    <video id="camera-preview"></video>
+    
+    <canvas id="canvas" style="display:none;"></canvas>
+    
+    <script>
+        const videoElement = document.getElementById('camera-preview');
+        const canvasElement = document.getElementById('canvas');
+        const canvas = canvasElement.getContext('2d');
+
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(function (stream) {
+                videoElement.srcObject = stream;
+                videoElement.setAttribute("playsinline", true); // Required to tell iOS Safari not to fullscreen the video
+                videoElement.play();
+                requestAnimationFrame(tick); // Start scanning frames
+            })
+            .catch(function (err) {
+                console.error("Camera access error: ", err);
+            });
+        }
+
+        function tick() {
+    if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+        canvasElement.height = videoElement.videoHeight;
+        canvasElement.width = videoElement.videoWidth;
+        canvas.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+        const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+
+        if (code) {
+            console.log("QR Code detected: " + code.data);
+            
+            // Check if the QR code contains a full URL or just the member ID
+            if (code.data.startsWith("http")) {
+                // If the QR code contains the full URL, use it directly
+                window.location.href = code.data;
+            } else {
+                // If the QR code contains only the member ID, construct the URL
+                window.location.href = '/members/' + code.data + '/';
+            }
+        } else {
+            // Continue scanning if no QR code is detected
+            requestAnimationFrame(tick);
+        }
+    } else {
+        requestAnimationFrame(tick); // Continue checking until the video is ready
+    }
+}
+
+
+        // Start camera when the page loads
+        startCamera();
+    </script>
+</body>
+</html>

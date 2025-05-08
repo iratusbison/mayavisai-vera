@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+{{ "Dashboard" }}
+{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/materialize.css' %}">
+<link rel="stylesheet" href="{% static 'perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.min.css' %}">
+<link rel="stylesheet" href="{% static 'dropify/css/dropify.min.css' %}">
+<style>
+
+  /* General container styling */
+  .container {
+    padding: 20px;
+    background-color: #1a1a1a; /* Dark background for the container */
+    border-radius: 8px;
+  }
+
+  /* Card styling */
+  .card {
+    border-radius: 8px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card-content {
+    padding: 20px;
+  }
+
+  .card-title a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  .card-title a:hover {
+    text-decoration: underline;
+  }
+
+  .card-content p {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-background-1 {
+    background-color: #348538; /* Green */
+  }
+
+  .card-background-2 {
+    background-color: #11519b; /* Blue */
+  }
+
+  .card-background-3 {
+    background-color: #B71C1C; /* Red */
+  }
+
+  .card-background-4 {
+    background-color: #4e1472; /* Purple */
+  }
+
+  /* Dark Mode Styles */
+  body {
+    background-color: #1a1a1a;
+    color: #ffffff; /* Light text on a dark background */
+  }
+
+  .nav-active {
+    border-right: solid .3rem #263238;
+  }
+
+  .search-wrapper {
+    position: relative;
+  }
+
+  .search-wrapper .label-icon {
+    position: absolute;
+    bottom: 30%;
+  }
+
+  .search-wrapper input[type="search"] {
+    padding-left: 2.5rem;
+    width: calc(100% - 2.5rem);
+  }
+
+  table.clean tr {
+    border: none;
+  }
+
+  .input-field input[type=text]:focus + label {
+    color: #001eff;
+  }
+
+  .input-field input[type=text]:focus {
+    border-bottom: 1px solid #001eff;
+    box-shadow: 0 1px 0 0 #001eff;
+  }
+
+
+  /* Style the side navigation bar */
+  #slide-out {
+    background-color: #263238; /* Dark background color for the sidebar */
+    color: #ffffff; /* Light text color for sidebar items */
+  }
+
+  #slide-out a {
+    color: #ffffff;
+  }
+
+  /* Light icon colors for dark theme */
+  .material-icons.light {
+    color: #ffffff !important;
+  }
+
+  /* Adjust logo size and text size */
+  .logo-wrapper a {
+    display: flex;
+    align-items: center;
+    padding: 10px; /* Add padding to adjust logo position */
+  }
+
+  .logo-wrapper img {
+    width: 60px; /* Adjust logo width */
+    height: auto;
+    margin-right: 10px;
+  }
+
+  .logo-text {
+    color: #FFD700; /* Golden text color */
+    font-size: 24px; /* Adjust text size */
+  }
+</style>
+
+{% block dashboard_styles %}
+
+{% endblock dashboard_styles %}
+{% endblock styles %}
+
+{% block content %}
+<header id="header" class="page-topbar">
+  <!-- start header nav-->
+  <div class="navbar-fixed">
+    <ul class="right">
+
+      <a href="{% url 'profile' %}" class="waves-effect waves-block waves-light profile-button" title="Profile">
+        <!-- Profile icon -->{{ user_profile }}
+        <i class="material-icons light">account_circle</i>
+
+      </a>
+
+  </ul>
+
+    <nav class="navbar-color grey darken-4">
+      <div class="nav-wrapper">
+    <center><ul class="center"> <img src="{% static 'images/im.png' %}" alt="MayaVisai Logo" style="height: 50px; width: auto;"></ul><h4>  </h4> </center>
+
+
+      </div>
+
+    </nav>
+
+  </div>
+
+
+
+  <!-- end header nav-->
+</header>
+</header>
+
+
+<div id="main">
+  <!-- START WRAPPER -->
+  <div class="wrapper">
+    <!-- START LEFT SIDEBAR NAV-->
+    <aside id="left-sidebar-nav">
+      <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y"
+        style="transform: translateX(0%);">
+        <li class="no-padding">
+  <ul class="" data-collapsible="accordion">
+    <li class="bold">
+      <a href="{% url 'sbdashboard' %}" class="">
+        <span class="nav-text"><i class="fas fa-home"></i> Dashboard </span>
+      </a>
+    </li>
+  </ul>
+</li>
+
+            <li class="bold">
+              <a href="{% url 'sroom_list' %}" class="waves-effect {% if active_tab == 'item' %}nav-active{% endif %}">
+                <i class="material-icons light">group</i>
+                <span class="nav-text">Rooms</span>
+              </a>
+            </li>
+            <li class="bold">
+              <a href="{% url 'sbook_room' %}" class="waves-effect {% if active_tab == 'sale' %}nav-active{% endif %}">
+                <i class="material-icons light">event_note</i>
+                <span class="nav-text">Add Booking</span>
+              </a>
+            </li>
+
+
+
+ <li class="bold">
+              <a href="{% url 'staff_mark_attendance' %}" target="_blank" class="waves-effect {% if active_tab == 'sale' %}nav-active{% endif %}">
+                <i class="material-icons light">event_note</i>
+                <span class="nav-text">Staff Log</span>
+              </a>
+            </li>
+
+
+
+
+
+        <li>
+          <a href="{% url 'stafflogout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
+            <span class="nav-text">exit</span>
+            <i class="material-icons light">exit_to_app</i>
+          </a>
+        </li>
+        <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;">
+          <div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps-scrollbar-y-rail" style="top: 0px; height: 529.333px; right: 3px;">
+          <div class="ps-scrollbar-y" style="top: 0px; height: 446px;"></div>
+        </div>
+      </ul>
+      <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only amber darken-4">
+        <i class="material-icons">menu</i>
+      </a>
+    </aside>
+
+    <!-- END LEFT SIDEBAR NAV-->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+    <!-- START CONTENT -->
+    {% block bdashboard_content %}
+<!-- START CONTENT -->
+    <section id="content">
+      <!-- start container -->
+      <div class="container">
+        <!-- Upcoming Bookings -->
+        <h4 class="white-text">Upcoming Bookings</h4>
+        <div class="row">
+          {% for room in room_data %}
+            <div class="col s12 m6 l4">
+              <div class="card card-background-1">
+                <div class="card-content white-text">
+                  <span class="card-title">{{ room.room.room_number }}</span>
+                  <ul>
+                    {% for booking in room.upcoming_bookings %}
+                      <li> Booking ID: {{ booking.user_specific_id }} - {{ booking.checkin_datetime|date:"M d, Y H:i" }}</li>
+                    {% empty %}
+                      <li>No upcoming bookings for this room</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Recent Bookings -->
+        <h4 class="white-text">Recent Bookings</h4>
+        <div class="row">
+          {% for room in room_data %}
+            <div class="col s12 m6 l4">
+              <div class="card card-background-2">
+                <div class="card-content white-text">
+                  <span class="card-title">{{ room.room.room_number }}</span>
+                  <ul>
+                    {% for booking in room.recent_bookings %}
+                      <li>Booking ID: {{ booking.user_specific_id }} - {{ booking.checkin_datetime|date:"M d, Y H:i" }}</li>
+                    {% empty %}
+                      <li>No recent bookings for this room</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+
+
+        <!-- Quick Actions -->
+        <h4 class="white-text"> </h4>
+        <div class="row">
+          <div class="col s12 m6 l4">
+
+          </div>
+          <div class="col s12 m6 l4">
+
+          </div>
+        </div>
+      </div>
+      <!-- end container -->
+    </section>
+    <!-- END CONTENT -->
+  </div>
+</div>
+
+    {% endblock bdashboard_content %}
+    <!-- END CONTENT -->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+  </div>
+  <!-- END WRAPPER -->
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/materialize.min.js' %}"></script>
+<script src="{% static 'perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'dropify/js/dropify.min.js' %}"></script>
+<script type="text/javascript">
+  $(window).ready(() => {
+    $('.dropify').dropify();
+  });
+</script>
+{% if messages %}
+<script>
+  $(document).ready(() => {
+    {% for message in messages %}
+      M.toast({
+        html: `{{ message|escape }}`,
+        classes: `{{ message.tags }}`,
+        displayLength: 1500
+      })
+    {% endfor %}
+  })
+</script>
+{% endif %}
+{% block dashboard_scripts %}
+{% endblock dashboard_scripts %}
+{% endblock scripts %}

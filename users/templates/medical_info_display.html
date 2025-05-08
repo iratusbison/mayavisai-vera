@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medical Info Display</title>
+</head>
+<body>
+    <h2>Medical Info</h2>
+    {% if medical_info %}
+        <p><strong>Weight:</strong> {{ medical_info.weight }}</p>
+        <p><strong>Height:</strong> {{ medical_info.height }}</p>
+        <p><strong>Exercise History:</strong> {{ medical_info.exercise_history }}</p>
+        <!-- Add more fields as needed -->
+    {% else %}
+        <p>No medical info available for this member.</p>
+    {% endif %}
+
+    <a href="{% url 'medical_info_edit' member_id=member_id %}"><button>Edit</button></a>
+    <a href="{% url 'medical_info_add' member_id=member_id %}"><button>Add</button></a>
+</body>
+</html>
